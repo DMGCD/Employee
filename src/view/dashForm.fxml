@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,7 +13,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.dashFormController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -43,41 +47,45 @@
                <left>
                   <AnchorPane prefHeight="565.0" prefWidth="220.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="10.0" layoutY="14.0" prefHeight="565.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="10.0" layoutY="14.0" prefHeight="565.0" prefWidth="220.0" styleClass="nav-form" stylesheets="@../css/dashBoard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <FontAwesomeIconView glyphName="USER" layoutX="67.0" layoutY="143.0" size="10em" />
-                              <Label layoutX="26.0" layoutY="176.0" text="Well Come " AnchorPane.leftAnchor="14.0">
+                              <FontAwesomeIconView fill="#fcf8f8" glyphName="USER" layoutX="67.0" layoutY="143.0" size="10em" />
+                              <Label layoutX="26.0" layoutY="176.0" text="Well Come " textFill="#f8f5f5" AnchorPane.leftAnchor="14.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="67.0" layoutY="196.0" text="GAYAN">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="67.0" layoutY="196.0" text="GAYAN" textFill="#fdfffe">
                                  <font>
                                     <Font name="Tahoma Bold" size="20.0" />
                                  </font>
                               </Label>
-                              <Line endX="100.0" layoutX="110.0" layoutY="259.0" startX="-89.0" AnchorPane.leftAnchor="14.0" />
-                              <Button layoutX="5.0" layoutY="283.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="210.0" text="Home" AnchorPane.leftAnchor="14.0">
+                              <Line endX="100.0" layoutX="110.0" layoutY="259.0" startX="-89.0" stroke="#f5f3f3" AnchorPane.leftAnchor="14.0" />
+                              <Button layoutX="5.0" layoutY="283.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Home" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="HOME" size="1.7em" />
                                  </graphic>
                               </Button>
-                              <Button layoutX="4.0" layoutY="324.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="210.0" text="Add Employee" AnchorPane.leftAnchor="14.0">
+                              <Button layoutX="4.0" layoutY="324.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Add Employee" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="PLUS" size="1.7em" />
                                  </graphic>
                               </Button>
-                              <Button layoutX="4.0" layoutY="365.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="210.0" text="Employee Salary" AnchorPane.leftAnchor="14.0">
+                              <Button layoutX="4.0" layoutY="365.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Employee Salary" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="MONEY" size="1.7em" />
                                  </graphic>
                               </Button>
-                              <Button layoutX="14.0" layoutY="526.0" mnemonicParsing="false" AnchorPane.leftAnchor="14.0">
+                              <Button layoutX="14.0" layoutY="526.0" mnemonicParsing="false" stylesheets="@../css/dashBoard.css" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="SIGN_OUT" size="2em" />
                                  </graphic>
+                                 <styleClass>
+                                    <String fx:value="logout" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
                               </Button>
-                              <Label layoutX="61.0" layoutY="534.0" text="Log Out">
+                              <Label layoutX="61.0" layoutY="534.0" text="Log Out" textFill="#fcfafa">
                                  <font>
                                     <Font name="Arial" size="12.0" />
                                  </font>
@@ -90,7 +98,90 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="89.0" layoutY="94.0" prefHeight="565.0" prefWidth="876.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <AnchorPane layoutX="89.0" layoutY="94.0" prefHeight="565.0" prefWidth="876.0" stylesheets="@../css/dashBoard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane layoutX="12.0" prefHeight="541.0" prefWidth="856.0" stylesheets="@../css/dashBoard.css">
+                                 <styleClass>
+                                    <String fx:value="white-bg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <children>
+                                    <AnchorPane layoutX="1.0" prefHeight="162.0" prefWidth="856.0" stylesheets="@../css/dashBoard.css">
+                                       <styleClass>
+                                          <String fx:value="white-bg" />
+                                          <String fx:value="shadow" />
+                                       </styleClass>
+                                       <children>
+                                          <AnchorPane layoutX="26.0" layoutY="14.0" prefHeight="134.0" prefWidth="233.0" stylesheets="@../css/dashBoard.css">
+                                             <styleClass>
+                                                <String fx:value="card" />
+                                                <String fx:value="nav-form" />
+                                             </styleClass>
+                                             <children>
+                                                <FontAwesomeIconView fill="#fcf9f9" glyphName="USERS" layoutX="14.0" layoutY="75.0" size="5em" />
+                                                <Label layoutX="71.0" layoutY="100.0" text="Total Employee" textFill="#fcfcfc">
+                                                   <font>
+                                                      <Font name="Arial" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label alignment="CENTER_RIGHT" layoutX="96.0" layoutY="36.0" prefHeight="36.0" prefWidth="103.0" text="0" textFill="#f8f6f6">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane layoutX="306.0" layoutY="14.0" prefHeight="134.0" prefWidth="233.0" stylesheets="@../css/dashBoard.css">
+                                             <styleClass>
+                                                <String fx:value="card" />
+                                                <String fx:value="nav-form" />
+                                             </styleClass>
+                                             <children>
+                                                <FontAwesomeIconView fill="#fcf9f9" glyphName="CHECK" layoutX="31.0" layoutY="73.0" size="5em" />
+                                                <Label layoutX="88.0" layoutY="98.0" text="Total Present " textFill="#fcfcfc">
+                                                   <font>
+                                                      <Font name="Arial" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label alignment="CENTER_RIGHT" layoutX="113.0" layoutY="34.0" prefHeight="36.0" prefWidth="103.0" text="0" textFill="#f8f6f6">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane layoutX="588.0" layoutY="14.0" prefHeight="134.0" prefWidth="233.0" stylesheets="@../css/dashBoard.css">
+                                             <styleClass>
+                                                <String fx:value="card" />
+                                                <String fx:value="nav-form" />
+                                             </styleClass>
+                                             <children>
+                                                <FontAwesomeIconView fill="#fcf9f9" glyphName="MINUS" layoutX="24.0" layoutY="85.0" size="5em" />
+                                                <Label layoutX="56.0" layoutY="103.0" text="Total Inactive Employee" textFill="#fcfcfc">
+                                                   <font>
+                                                      <Font name="Arial" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="46.0" prefHeight="36.0" prefWidth="103.0" text="0" textFill="#f8f6f6">
+                                                   <font>
+                                                      <Font size="25.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </AnchorPane>
+                                    <BarChart layoutX="132.0" layoutY="195.0" prefHeight="304.0" prefWidth="616.0" title="Employee Data Chart">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
+                                 </children>
+                              </AnchorPane>
+                           </children></AnchorPane>
                      </children>
                   </AnchorPane>
                </center>
