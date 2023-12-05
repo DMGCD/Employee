@@ -2,6 +2,7 @@ package controller;
 
 
 import Db.Dbconnection;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
@@ -12,7 +13,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,14 +25,19 @@ import java.sql.SQLException;
 
 
 public class loginFormController {
+    double x =0;
+    double y=0;
     @FXML
     private Button btnClosed;
+    @FXML
+    private Button btnLogin;
 
     @FXML
     private PasswordField txtPassword;
 
     @FXML
     private TextField txtUserName;
+
 
     public void btnCloseOnAction(ActionEvent actionEvent) {
         System.exit(0);
@@ -59,6 +67,8 @@ public class loginFormController {
 
     }
     public void loginToEmployeeDashBoard(){
+        btnLogin.getScene().getWindow().hide();
+
 
         String passworrdL = txtPassword.getText();
         String userNameL = txtUserName.getText();
@@ -69,9 +79,29 @@ public class loginFormController {
             preparedStatement.setObject(2,userNameL);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
+
+
                 Parent parent = FXMLLoader.load(this.getClass().getResource("../view/dashForm.fxml"));
                 Scene scene = new Scene(parent);
                 Stage stage = new Stage();
+
+                parent.setOnMousePressed((MouseEvent e)->{
+
+                    x= e.getSceneX();
+                    y=e.getSceneY();
+
+                });
+                parent.setOnMouseDragged((MouseEvent e)->{
+                    stage.setX(e.getScreenX()-x);
+                    stage.setY(e.getScreenY()-y);
+                    stage.setOpacity(.4);
+                });
+                parent.setOnMouseReleased((MouseEvent e)->{
+                    stage.setOpacity(1);
+                });
+
+                stage.initStyle(StageStyle.TRANSPARENT);
+
                 stage.setScene(scene);
                 stage.centerOnScreen();
                 stage.show();
@@ -92,5 +122,11 @@ public class loginFormController {
         }
 
 
+    }
+
+    public void btnLoginOnAction(ActionEvent actionEvent) {
+        loginToEmployeeDashBoard();
+        txtUserName.clear();
+        txtPassword.clear();
     }
 }
