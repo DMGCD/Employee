@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.loginFormController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -27,8 +26,8 @@
             </AnchorPane>
             <AnchorPane layoutX="300.0" prefHeight="400.0" prefWidth="300.0">
                <children>
-                  <TextField layoutX="63.0" layoutY="175.0" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="tUsername" stylesheets="@../css/login.css" />
-                  <PasswordField layoutX="63.0" layoutY="231.0" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="tPassword" stylesheets="@../css/login.css" />
+                  <TextField fx:id="txtUserName" layoutX="63.0" layoutY="175.0" onAction="#txtUserNameOnAction" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="tUsername" stylesheets="@../css/login.css" />
+                  <PasswordField fx:id="txtPassword" layoutX="63.0" layoutY="231.0" onAction="#txtPasswordOnAction" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="tPassword" stylesheets="@../css/login.css" />
                   <Button layoutX="63.0" layoutY="299.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="220.0" styleClass="btnLogin" stylesheets="@../css/login.css" text="Login">
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -44,7 +43,7 @@
                   </Label>
                   <FontAwesomeIconView glyphName="USER" layoutX="33.0" layoutY="194.0" size="1.5em" />
                   <FontAwesomeIconView glyphName="KEY" layoutX="33.0" layoutY="250.0" size="1.2em" />
-                  <Button layoutX="234.0" layoutY="14.0" mnemonicParsing="false" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                  <Button fx:id="btnClosed" layoutX="234.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnCloseOnAction" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                      <graphic>
                         <FontAwesomeIconView fill="#ee0808" glyphName="CLOSE" size="1.5em" />
                      </graphic>
