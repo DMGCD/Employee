@@ -1,0 +1,28 @@
+.leftForm{
+	-fx-background-color: linear-gradient(to bottom right ,#08713D, #13BE69);
+}
+
+.leftForm:hover{
+	-fx-background-color: linear-gradient(to bottom right ,#095A31 ,#048343);
+	-fx-transition: -fx-background-color 0.3s;
+	
+}
+
+.btnLogin{
+	-fx-cursor:hand;
+}
+.btnLogin:hover{
+	
+	-fx-background-color:linear-gradient(to bottom right ,#54E29B, #79E7B0);
+}
+.tUsername{
+	-fx-background-color: transparent;
+	-fx-border-color:#138A4F;
+	-fx-border-width:0px 0px 3px 0px;
+	
+}
+.tPassword{
+	-fx-background-color: transparent;
+	-fx-border-color:#138A4F;
+	-fx-border-width:0px 0px 3px 0px;
+}

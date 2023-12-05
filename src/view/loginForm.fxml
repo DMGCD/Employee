@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane prefHeight="400.0" prefWidth="300.0" styleClass="leftForm" stylesheets="@../css/login.css">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USERS" layoutX="80.0" layoutY="151.0" size="10EM" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="203.0" text="Employee Mangement System" textFill="#f5f4f4">
+                     <font>
+                        <Font name="Tahoma" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="300.0" prefHeight="400.0" prefWidth="300.0">
+               <children>
+                  <TextField layoutX="63.0" layoutY="175.0" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="tUsername" stylesheets="@../css/login.css" />
+                  <PasswordField layoutX="63.0" layoutY="231.0" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="tPassword" stylesheets="@../css/login.css" />
+                  <Button layoutX="63.0" layoutY="299.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="220.0" styleClass="btnLogin" stylesheets="@../css/login.css" text="Login">
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="33.0" layoutY="82.0" text="Well Come Admin">
+                     <font>
+                        <Font name="Goudy Old Style Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <FontAwesomeIconView glyphName="USER" layoutX="33.0" layoutY="194.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="KEY" layoutX="33.0" layoutY="250.0" size="1.2em" />
+                  <Button layoutX="234.0" layoutY="14.0" mnemonicParsing="false" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                     <graphic>
+                        <FontAwesomeIconView fill="#ee0808" glyphName="CLOSE" size="1.5em" />
+                     </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
