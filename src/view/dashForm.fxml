@@ -67,22 +67,22 @@
                                  </font>
                               </Label>
                               <Line endX="100.0" layoutX="110.0" layoutY="259.0" startX="-89.0" stroke="#f5f3f3" AnchorPane.leftAnchor="14.0" />
-                              <Button fx:id="homeBtn" layoutX="5.0" layoutY="283.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Home" AnchorPane.leftAnchor="14.0">
+                              <Button fx:id="homeBtn" layoutX="5.0" layoutY="283.0" mnemonicParsing="false" onAction="#homeBtnOnAction" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Home" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="HOME" size="1.7em" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="addEmployeeNav_btn" layoutX="4.0" layoutY="324.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Add Employee" AnchorPane.leftAnchor="14.0">
+                              <Button fx:id="addEmployeeNav_btn" layoutX="4.0" layoutY="324.0" mnemonicParsing="false" onAction="#addEmployeeNav_btnOnAction" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Add Employee" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="PLUS" size="1.7em" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="salary_btn" layoutX="4.0" layoutY="365.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Employee Salary" AnchorPane.leftAnchor="14.0">
+                              <Button fx:id="salary_btn" layoutX="4.0" layoutY="365.0" mnemonicParsing="false" onAction="#salary_btnOnAction" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../css/dashBoard.css" text="Employee Salary" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="MONEY" size="1.7em" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="LogOutbtn" layoutX="14.0" layoutY="526.0" mnemonicParsing="false" stylesheets="@../css/dashBoard.css" AnchorPane.leftAnchor="14.0">
+                              <Button fx:id="LogOutbtn" layoutX="14.0" layoutY="526.0" mnemonicParsing="false" onAction="#LogOutbtnOnAcction" stylesheets="@../css/dashBoard.css" AnchorPane.leftAnchor="14.0">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="SIGN_OUT" size="2em" text="" />
                                  </graphic>
@@ -204,8 +204,8 @@
                                        <children>
                                           <TableView fx:id="addEmployee_TableView" layoutX="22.0" layoutY="55.0" prefHeight="247.0" prefWidth="797.0" stylesheets="@../css/dashBoard.css">
                                             <columns>
-                                              <TableColumn prefWidth="75.0" text="Employee ID" />
-                                              <TableColumn prefWidth="163.0" text="First Name" />
+                                              <TableColumn prefWidth="101.0" text="Employee ID" />
+                                              <TableColumn prefWidth="137.0" text="First Name" />
                                                 <TableColumn prefWidth="141.0" text="Last Name" />
                                                 <TableColumn prefWidth="65.0" text="Gender" />
                                                 <TableColumn prefWidth="94.0" text="Phone #" />
