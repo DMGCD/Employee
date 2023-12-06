@@ -67,7 +67,7 @@ public class loginFormController {
 
     }
     public void loginToEmployeeDashBoard(){
-        btnLogin.getScene().getWindow().hide();
+
 
 
         String passworrdL = txtPassword.getText();
@@ -79,6 +79,7 @@ public class loginFormController {
             preparedStatement.setObject(2,userNameL);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
+                btnLogin.getScene().getWindow().hide();
 
 
                 Parent parent = FXMLLoader.load(this.getClass().getResource("../view/dashForm.fxml"));

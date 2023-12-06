@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class dashFormController {
     @FXML
@@ -52,6 +53,8 @@ public class dashFormController {
 
     @FXML
     private TableView<addEmployeeTM> addEmployee_TableView;
+    @FXML
+    private AnchorPane mainFormRoot;
 
     @FXML
     private Button addEmployee_UpdateBtn;
@@ -64,6 +67,13 @@ public class dashFormController {
 
 
     public void btaadminnCloseOnAction(ActionEvent actionEvent) {
+
         System.exit(0);
+    }
+
+    public void minimizeBtnOnAction(ActionEvent actionEvent) {
+        Stage stage=(Stage)mainFormRoot.getScene().getWindow();
+        stage.setIconified(true);
+
     }
 }
