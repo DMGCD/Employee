@@ -98,6 +98,7 @@ private Image image;
 
     @FXML
     private Button addEmployee_clearBtn;
+    String empID;
 double x;
 double y;
     String getData;
@@ -215,7 +216,8 @@ salary_btn.setStyle("-fx-background-color: transparent");
                 addEmployeeTM selectedItem = addEmployee_TableView.getSelectionModel().getSelectedItem();
                 ObservableList<addEmployeeTM> items = addEmployee_TableView.getSelectionModel().getSelectedItems();
                 if(selectedItem != null ){
-                    addEmployee_EmpId.setText(selectedItem.getEmpID());
+                    empID=selectedItem.getEmpID();
+                     addEmployee_EmpId.setText(empID);
                     addEmployee_FirstName.setText(selectedItem.getFirstName());
                     addEmployee_LastName.setText(selectedItem.getLastName());
                     addEmployee_Phone.setText(selectedItem.getPhoneNum());
@@ -359,6 +361,29 @@ public void clearFeild(){
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+    public void addEmployee_UpdateBtnOnAction(ActionEvent actionEvent) {
+    }
+
+    public void addEmployee_DeletebtnOnAction(ActionEvent actionEvent) {
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("delete from employee where empID =?");
+            preparedStatement.setObject(1,empID);
+            int i = preparedStatement.executeUpdate();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Delete Successfull",ButtonType.OK);
+
+            Optional<ButtonType> buttonType = alert.showAndWait();
+            if(buttonType.get().equals(ButtonType.OK)){
+                clearFeild();
+                loadAddEmployeeTable();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 }
