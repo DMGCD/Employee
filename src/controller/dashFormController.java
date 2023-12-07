@@ -305,9 +305,58 @@ salary_btn.setStyle("-fx-background-color: transparent");
          empPostion = addEmployee_Position.getSelectionModel().getSelectedItem();
 
     }
-
+//add button on Emmployee Add
     public void addEmployee_addBtnOnAction(ActionEvent actionEvent) {
+if(addEmployee_Position.getSelectionModel().getSelectedItem()!=null && addEmployee_Gender.getSelectionModel().getSelectedItem()!=null && addEmployee_FirstName.getText()!=null && addEmployee_LastName.getText()!=null && addEmployee_Phone.getText()!=null && addEmployee_EmpId.getText()!=null &&getData !=null && getData!=""){
+    Alert alert = new Alert(Alert.AlertType.INFORMATION,"",ButtonType.OK);
+    alert.setHeaderText("SuccessFul Add !");
+    insertData();
+    Optional<ButtonType> buttonType = alert.showAndWait();
+    if(buttonType.get().equals(ButtonType.OK)){
+        clearFeild();
+    }
 
-        
+}
+else{
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setHeaderText("Fill   Correct And Dont give Blanck !");
+    alert.showAndWait();
+}
+
+    }
+public void clearFeild(){
+        addEmployee_Gender.getSelectionModel().clearSelection();
+        addEmployee_Position.getSelectionModel().clearSelection();
+        addEmployee_LastName.clear();
+        addEmployee_Phone.clear();
+        addEmployee_FirstName.clear();
+        addEmployee_EmpId.clear();
+}
+
+    public void insertData(){
+
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            java.util.Date date = new java.util.Date();
+            java.sql.Date date1=  new java.sql.Date(date.getTime());
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee( empID, firstName, lastName, gender, phoneNum, position, image, date) values (?,?,?,?,?,?,?,?)");
+            preparedStatement.setObject(1,addEmployee_EmpId.getText());
+            preparedStatement.setObject(2,addEmployee_FirstName.getText());
+            preparedStatement.setObject(3,addEmployee_LastName.getText());
+            preparedStatement.setObject(4,addEmployee_Gender.getSelectionModel().getSelectedItem());
+            preparedStatement.setObject(5,addEmployee_Phone.getText());
+            preparedStatement.setObject(6,addEmployee_Position.getSelectionModel().getSelectedItem());
+            preparedStatement.setObject(7,getData);
+            preparedStatement.setObject(8,date1);
+            preparedStatement.executeUpdate();
+
+            loadAddEmployeeTable();
+            addEmployee_TableView.refresh();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
