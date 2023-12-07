@@ -331,6 +331,8 @@ public void clearFeild(){
         addEmployee_Phone.clear();
         addEmployee_FirstName.clear();
         addEmployee_EmpId.clear();
+        getData="";
+        addEmployeeImageview.setImage(null);
 }
 
     public void insertData(){
