@@ -5,6 +5,7 @@ import Db.Dbconnection;
 import TM.addEmployeeTM;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,13 +15,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class dashFormController {
@@ -48,7 +54,7 @@ public class dashFormController {
     //************************
     @FXML
     private Button addEmployee_Deletebtn;
-
+private Image image;
     @FXML
     private TextField addEmployee_EmpId;
 
@@ -56,10 +62,13 @@ public class dashFormController {
     private TextField addEmployee_FirstName;
 
     @FXML
-    private ComboBox<?> addEmployee_Gender;
+    private ComboBox<String> addEmployee_Gender;
 
     @FXML
     private AnchorPane addEmployee_Image;
+
+    @FXML
+    private ImageView addEmployeeImageview;
 
     @FXML
     private Button addEmployee_ImportBtn;
@@ -71,7 +80,7 @@ public class dashFormController {
     private TextField addEmployee_Phone;
 
     @FXML
-    private ComboBox<?> addEmployee_Position;
+    private ComboBox<String> addEmployee_Position;
 
     @FXML
     private TextField addEmployee_Search;
@@ -91,6 +100,7 @@ public class dashFormController {
     private Button addEmployee_clearBtn;
 double x;
 double y;
+    String getData;
 
     public void btaadminnCloseOnAction(ActionEvent actionEvent) {
 
@@ -189,6 +199,9 @@ salary_btn.setStyle("-fx-background-color: transparent");
     }
    //initialize method
     public void initialize(){
+//initialize ComboBox
+        comboBoxEmpPosition();
+        comboBoxEmpGEnder();
         homeForm.setVisible(true);
         addEmployeeForm.setVisible(false);
         salaryForm.setVisible(false);
@@ -197,13 +210,24 @@ salary_btn.setStyle("-fx-background-color: transparent");
         addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
             @Override
             public void changed(ObservableValue<? extends addEmployeeTM> observable, addEmployeeTM oldValue, addEmployeeTM newValue) {
-                ObservableList<addEmployeeTM> itemSelect = addEmployee_TableView.getSelectionModel().getSelectedItems();
-                if(itemSelect != null){
+                addEmployeeTM selectedItem = addEmployee_TableView.getSelectionModel().getSelectedItem();
+                ObservableList<addEmployeeTM> items = addEmployee_TableView.getSelectionModel().getSelectedItems();
+                if(selectedItem != null ){
+                    addEmployee_EmpId.setText(selectedItem.getEmpID());
+                    addEmployee_FirstName.setText(selectedItem.getFirstName());
+                    addEmployee_LastName.setText(selectedItem.getLastName());
+                    addEmployee_Phone.setText(selectedItem.getPhoneNum());
+                    String url ="file:"+ selectedItem.getImage();
+                    image =new Image(url,101,97,false,true);
+                    addEmployeeImageview.setImage(image);
+
+
+//                    addEmployee_TableView.getSelectionModel().getSelectedItems().clear();
                     addEmployee_TableView.refresh();
 
                 }
                 else{
-                    addEmployee_TableView.getSelectionModel().getSelectedItems().clear();
+
                     addEmployee_TableView.refresh();
                     return;
                 }
@@ -212,7 +236,16 @@ salary_btn.setStyle("-fx-background-color: transparent");
             }
         });
     }
+    public void comboBoxEmpPosition(){
+        addEmployee_Position.setItems(FXCollections.observableArrayList(position));
+    }
+    public void comboBoxEmpGEnder(){
 
+        addEmployee_Gender.setItems(FXCollections.observableArrayList(gender));
+    }
+    private String [] position={"Web Dveloper(Front)","Web Developer(Back)","Web Developer(Full Stack","Mobile App Developer","Web Designer","UI/Ux Desingner"};
+
+    private String [] gender={"Male","Female","Other"};
     public void initAddEmployeeTableColumns(){
         addEmployee_TableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empID"));
         addEmployee_TableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -236,9 +269,10 @@ salary_btn.setStyle("-fx-background-color: transparent");
                 String gender = resultSet.getString(5);
                 String phoneNum = resultSet.getString(6);
                 String position = resultSet.getString(7);
+                String image = resultSet.getString(8);
                 Date date = resultSet.getDate(9);
                 ObservableList<addEmployeeTM> items = addEmployee_TableView.getItems();
-                items.add(new addEmployeeTM(empID,firstName,lastName,gender,phoneNum,position,date));
+                items.add(new addEmployeeTM(empID,firstName,lastName,gender,phoneNum,position,date,image));
                 addEmployee_TableView.refresh();
 
             }
@@ -246,5 +280,27 @@ salary_btn.setStyle("-fx-background-color: transparent");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void importImageOnMouseClicked(MouseEvent mouseEvent) {
+
+        FileChooser open = new FileChooser();
+        File getPath = open.showOpenDialog(mainFormRoot.getScene().getWindow());
+        if(getPath!=null){
+         getData = getPath.getAbsolutePath();
+            image =new Image(getPath.toURI().toString(),101,97,false,true);
+            addEmployeeImageview.setImage(image);
+        }
+    }
+    public void addEmployee_GenderOnAction(ActionEvent actionEvent) {
+
+        Comparable<String> empGender = addEmployee_Gender.getSelectionModel().getSelectedItem();
+        
+    }
+
+
+    public void addEmployee_PositionOnAction(ActionEvent actionEvent) {
+        Comparable<String> empPostion = addEmployee_Position.getSelectionModel().getSelectedItem();
+
     }
 }

@@ -1,26 +1,36 @@
 package TM;
 
+import javafx.scene.image.Image;
+
 import java.sql.Date;
 
 public class addEmployeeTM {
 
-    public addEmployeeTM(String empID, String firstName, String lastName, String gender, String phoneNum, String position, Date date) {
-        this.setEmpID(empID);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setGender(gender);
-        this.setPhoneNum(phoneNum);
-        this.setPosition(position);
-        this.setDate(date);
+
+    public addEmployeeTM(String empID, String firstName, String lastName, String gender, String phoneNum, String position, Date date, String image) {
+        this.empID = empID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.phoneNum = phoneNum;
+        this.position = position;
+        this.date = date;
+        this.image = image;
     }
 
-  private  String empID;
+    public addEmployeeTM() {
+
+    }
+
+    private  String empID;
     private String firstName;
     private String lastName;
     private String gender;
     private String phoneNum;
     private String position;
     private Date date;
+    private String image;
+
 
     public String getEmpID() {
         return empID;
@@ -76,5 +86,13 @@ public class addEmployeeTM {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String  getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

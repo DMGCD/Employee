@@ -230,13 +230,13 @@
                                     <TextField fx:id="addEmployee_EmpId" layoutX="21.0" layoutY="328.0" prefHeight="20.0" prefWidth="150.0" promptText="Employee ID" styleClass="textfield" stylesheets="@../css/dashBoard.css" />
                                     <TextField fx:id="addEmployee_FirstName" layoutX="276.0" layoutY="328.0" prefHeight="20.0" prefWidth="150.0" promptText="First Name " styleClass="textfield" stylesheets="@../css/dashBoard.css" />
                                     <TextField fx:id="addEmployee_LastName" layoutX="533.0" layoutY="328.0" prefHeight="20.0" prefWidth="150.0" promptText="Last Name " styleClass="textfield" stylesheets="@../css/dashBoard.css" />
-                                    <ComboBox fx:id="addEmployee_Gender" layoutX="534.0" layoutY="402.0" prefHeight="20.0" prefWidth="150.0" promptText="Choose Position" styleClass="textfield" />
+                                    <ComboBox fx:id="addEmployee_Gender" layoutX="534.0" layoutY="402.0" onAction="#addEmployee_GenderOnAction" prefHeight="20.0" prefWidth="150.0" promptText="Choose Gender" styleClass="textfield" />
                                     <TextField fx:id="addEmployee_Phone" layoutX="21.0" layoutY="402.0" prefHeight="20.0" prefWidth="150.0" promptText="Phone #" styleClass="textfield" stylesheets="@../css/dashBoard.css" />
-                                    <ComboBox fx:id="addEmployee_Position" layoutX="277.0" layoutY="402.0" prefHeight="20.0" prefWidth="150.0" promptText="Choose Gender" styleClass="textfield" />
+                                    <ComboBox fx:id="addEmployee_Position" layoutX="277.0" layoutY="402.0" onAction="#addEmployee_PositionOnAction" prefHeight="20.0" prefWidth="150.0" promptText="Choose Postion" styleClass="textfield" />
                                     <AnchorPane fx:id="addEmployee_Image" layoutX="707.0" layoutY="327.0" prefHeight="119.0" prefWidth="101.0" stylesheets="@../css/dashBoard.css">
                                        <children>
-                                          <Button fx:id="addEmployee_ImportBtn" layoutY="95.0" mnemonicParsing="false" prefWidth="101.0" styleClass="importBtn" stylesheets="@../css/dashBoard.css" text="Import" />
-                                          <ImageView fitHeight="97.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Button fx:id="addEmployee_ImportBtn" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#importImageOnMouseClicked" prefWidth="101.0" styleClass="importBtn" stylesheets="@../css/dashBoard.css" text="Import" />
+                                          <ImageView fx:id="addEmployeeImageview" fitHeight="97.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <styleClass>
                                           <String fx:value="white-bg" />
