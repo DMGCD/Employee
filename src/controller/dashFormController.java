@@ -29,6 +29,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static java.lang.Integer.parseInt;
+
 public class dashFormController {
   //logout
     @FXML
@@ -168,6 +170,10 @@ salary_btn.setStyle("-fx-background-color: transparent");
     }
 
     public void addEmployeeNav_btnOnAction(ActionEvent actionEvent) {
+
+        clearFeild();
+        empID=empIdCreator();
+        addEmployee_EmpId.setText(empID);
         loadAddEmployeeTable();
         homeForm.setVisible(false);
         addEmployeeForm.setVisible(true);
@@ -200,8 +206,14 @@ salary_btn.setStyle("-fx-background-color: transparent");
 //            throw new RuntimeException(e);
 //        }
     }
+
+    
+
    //initialize method
     public void initialize(){
+        empIdCreator();
+        addEmployee_EmpId.setText(empID);
+        addEmployee_EmpId.setDisable(true);
 //initialize ComboBox
         comboBoxEmpPosition();
         comboBoxEmpGEnder();
@@ -216,7 +228,8 @@ salary_btn.setStyle("-fx-background-color: transparent");
                 addEmployeeTM selectedItem = addEmployee_TableView.getSelectionModel().getSelectedItem();
                 ObservableList<addEmployeeTM> items = addEmployee_TableView.getSelectionModel().getSelectedItems();
                 if(selectedItem != null ){
-                    empID=selectedItem.getEmpID();
+
+empID=selectedItem.getEmpID();
                      addEmployee_EmpId.setText(empID);
                     addEmployee_FirstName.setText(selectedItem.getFirstName());
                     addEmployee_LastName.setText(selectedItem.getLastName());
@@ -261,6 +274,7 @@ salary_btn.setStyle("-fx-background-color: transparent");
 
     }
     public void loadAddEmployeeTable(){
+
         addEmployee_TableView.getItems().clear();
         Connection connection = Dbconnection.getInstance().getConnection();
         try {
@@ -312,10 +326,27 @@ salary_btn.setStyle("-fx-background-color: transparent");
 if(addEmployee_Position.getSelectionModel().getSelectedItem()!=null && addEmployee_Gender.getSelectionModel().getSelectedItem()!=null && addEmployee_FirstName.getText()!=null && addEmployee_LastName.getText()!=null && addEmployee_Phone.getText()!=null && addEmployee_EmpId.getText()!=null &&getData !=null && getData!=""){
     Alert alert = new Alert(Alert.AlertType.INFORMATION,"",ButtonType.OK);
     alert.setHeaderText("SuccessFul Add !");
+
     insertData();
+
+
     Optional<ButtonType> buttonType = alert.showAndWait();
     if(buttonType.get().equals(ButtonType.OK)){
-        clearFeild();
+        Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> buttonType1 = alt.showAndWait();
+        if(buttonType1.get().equals(ButtonType.YES)){
+            clearFeild();
+            empID=empIdCreator();
+            addEmployee_EmpId.setText(empID);
+
+        }
+        else {
+            clearFeild();
+            empID=empIdCreator();
+            addEmployee_EmpId.setText(empID);
+
+        }
+
     }
 
 }
@@ -324,6 +355,7 @@ else{
     alert.setHeaderText("Fill   Correct And Dont give Blanck !");
     alert.showAndWait();
 }
+
 
     }
 public void clearFeild(){
@@ -365,6 +397,45 @@ public void clearFeild(){
     }
 
     public void addEmployee_UpdateBtnOnAction(ActionEvent actionEvent) {
+
+        empUpdateDetail();
+    }
+    // update button Details
+    public void empUpdateDetail(){
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "If You Want Update", ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> buttonType = alt.showAndWait();
+            if(buttonType.get().equals(ButtonType.YES)){
+                String url =getData;
+                url =url.replace("\\","\\\\");
+                java.util.Date date = new java.util.Date();
+                java.sql.Date date1=  new java.sql.Date(date.getTime());
+                PreparedStatement preparedStatement = connection.prepareStatement("update employee set firstName=?, lastName=?,gender=?,phoneNum=?,position=?,image=?,date=? where empID=?");
+                preparedStatement.setObject(1,addEmployee_FirstName.getText());
+                preparedStatement.setObject(2,addEmployee_LastName.getText());
+                preparedStatement.setObject(3,addEmployee_Gender.getSelectionModel().getSelectedItem());
+                preparedStatement.setObject(4,addEmployee_Phone.getText());
+                preparedStatement.setObject(5,addEmployee_Position.getSelectionModel().getSelectedItem());
+                preparedStatement.setObject(6,url);
+                preparedStatement.setObject(7,date1);
+                preparedStatement.setObject(8,addEmployee_EmpId.getText());
+                preparedStatement.executeUpdate();
+                loadAddEmployeeTable();
+                addEmployee_TableView.refresh();
+            }
+            else{
+                clearFeild();
+                addEmployee_EmpId.setText(empID);
+
+
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void addEmployee_DeletebtnOnAction(ActionEvent actionEvent) {
@@ -384,6 +455,46 @@ public void clearFeild(){
             throw new RuntimeException(e);
         }
 
+
+    }
+
+    public String empIdCreator(){
+
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select empID from employee order by empID desc limit 1");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                String empIDS =resultSet.getString(1);
+                empIDS=empIDS.substring(1,empIDS.length());
+               int empIDI = Integer.parseInt(empIDS);
+                empIDI++;
+                if(empIDI<10){
+                    empIDS="E00"+empIDI;
+                }
+                else if(empIDI<100){
+                    empIDS="E0"+empIDI;
+                }
+                else {
+                    empIDS="E"+empIDI;
+                }
+                empID=empIDS;
+                return empID;
+
+            }
+            else{
+                empID="E001";
+                return empID;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void addEmployee_clearBtnOnAction(ActionEvent actionEvent) {
+
+        clearFeild();
 
     }
 }

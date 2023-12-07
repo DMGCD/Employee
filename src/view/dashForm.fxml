@@ -246,7 +246,7 @@
                                     <Button fx:id="addEmployee_addBtn" layoutX="732.0" layoutY="490.0" mnemonicParsing="false" onAction="#addEmployee_addBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="addBtn" stylesheets="@../css/dashBoard.css" text="Add" />
                                     <Button fx:id="addEmployee_UpdateBtn" layoutX="561.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_UpdateBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="updateBtn" stylesheets="@../css/dashBoard.css" text="Update" />
                                     <Button fx:id="addEmployee_Deletebtn" layoutX="387.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_DeletebtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="deleteBtn" stylesheets="@../css/dashBoard.css" text="Delete" />
-                                    <Button fx:id="addEmployee_clearBtn" layoutX="216.0" layoutY="491.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" styleClass="clearBtn" stylesheets="@../css/dashBoard.css" text="Clear" />
+                                    <Button fx:id="addEmployee_clearBtn" layoutX="216.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_clearBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="clearBtn" stylesheets="@../css/dashBoard.css" text="Clear" />
                                  </children>
                                  <stylesheets>
                                     <URL value="@../css/dashBoard.css" />
