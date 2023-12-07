@@ -101,6 +101,8 @@ private Image image;
 double x;
 double y;
     String getData;
+    Comparable<String> empPostion;
+    Comparable<String> empGender;
 
     public void btaadminnCloseOnAction(ActionEvent actionEvent) {
 
@@ -294,13 +296,18 @@ salary_btn.setStyle("-fx-background-color: transparent");
     }
     public void addEmployee_GenderOnAction(ActionEvent actionEvent) {
 
-        Comparable<String> empGender = addEmployee_Gender.getSelectionModel().getSelectedItem();
-        
+       empGender = addEmployee_Gender.getSelectionModel().getSelectedItem();
+
     }
 
 
     public void addEmployee_PositionOnAction(ActionEvent actionEvent) {
-        Comparable<String> empPostion = addEmployee_Position.getSelectionModel().getSelectedItem();
+         empPostion = addEmployee_Position.getSelectionModel().getSelectedItem();
 
+    }
+
+    public void addEmployee_addBtnOnAction(ActionEvent actionEvent) {
+
+        
     }
 }
