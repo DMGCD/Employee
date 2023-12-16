@@ -316,7 +316,7 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="salaryTableView" layoutX="14.0" layoutY="14.0" prefHeight="524.0" prefWidth="506.0">
+                                    <TableView fx:id="salaryTableView" layoutX="14.0" layoutY="14.0" prefHeight="524.0" prefWidth="506.0" stylesheets="@../css/dashBoard.css">
                                       <columns>
                                         <TableColumn prefWidth="75.0" text="Employee Id" />
                                         <TableColumn prefWidth="125.0" text="First Name" />
@@ -324,6 +324,13 @@
                                           <TableColumn prefWidth="91.0" text="Position" />
                                           <TableColumn prefWidth="110.0" text="Salary $" />
                                       </columns>
+                                       <styleClass>
+                                          <String fx:value="table_view" />
+                                          <String fx:value="table-column" />
+                                          <String fx:value="column-header-background" />
+                                          <String fx:value="column-header" />
+                                          <String fx:value="table-column" />
+                                       </styleClass>
                                     </TableView>
                                  </children>
                               </AnchorPane>

@@ -2,6 +2,7 @@ package controller;
 
 
 import Db.Dbconnection;
+import Db.SalarrryEmployeTM;
 import TM.addEmployeeTM;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -83,7 +84,8 @@ private Image image;
 
     @FXML
     private TextField addEmployee_Phone;
-
+    @FXML
+    private TableView<SalarrryEmployeTM> salaryTableView;
     @FXML
     private ComboBox<String> addEmployee_Position;
 
@@ -158,6 +160,7 @@ else{
     }
 
     public void homeBtnOnAction(ActionEvent actionEvent) {
+        addEmployee_Search.clear();
 homeForm.setVisible(true);
 addEmployeeForm.setVisible(false);
 salaryForm.setVisible(false);
@@ -173,11 +176,12 @@ salary_btn.setStyle("-fx-background-color: transparent");
     }
 
     public void addEmployeeNav_btnOnAction(ActionEvent actionEvent) {
-
+addEmployee_Search.clear();
         clearFeild();
+        loadAddEmployeeTable();
         empID=empIdCreator();
         addEmployee_EmpId.setText(empID);
-        loadAddEmployeeTable();
+
         homeForm.setVisible(false);
         addEmployeeForm.setVisible(true);
         salaryForm.setVisible(false);
@@ -212,6 +216,13 @@ salary_btn.setStyle("-fx-background-color: transparent");
 
     
 
+    public void intiDataSalaryTbale(){
+        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empId"));
+        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("positionEmp"));
+        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("salary"));
+    }
    //initialize method
     public void initialize(){
         empIdCreator();
@@ -223,8 +234,11 @@ salary_btn.setStyle("-fx-background-color: transparent");
         homeForm.setVisible(true);
         addEmployeeForm.setVisible(false);
         salaryForm.setVisible(false);
+       //initalize colomn for table
         initAddEmployeeTableColumns();
+        intiDataSalaryTbale();
         loadAddEmployeeTable();
+
         addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
             @Override
             public void changed(ObservableValue<? extends addEmployeeTM> observable, addEmployeeTM oldValue, addEmployeeTM newValue) {
@@ -240,6 +254,7 @@ empID=selectedItem.getEmpID();
                     String url ="file:"+ selectedItem.getImage();
                     image =new Image(url,101,97,false,true);
                     addEmployeeImageview.setImage(image);
+                    getData=selectedItem.getImage();
 
 
 //                    addEmployee_TableView.getSelectionModel().getSelectedItems().clear();
@@ -280,6 +295,7 @@ empID=selectedItem.getEmpID();
 
 addEmployee_TableView.setItems(dataListSearch);
 searchFilterMethod();
+loadAddEmployeeTable();
     }
 
     private void searchFilterMethod() {
@@ -317,7 +333,10 @@ addEmployee_Search.setOnKeyReleased(e->{
     addEmployee_TableView.setItems(sortedData);
 
 
+
+
 });
+
 
     }
 
@@ -447,6 +466,7 @@ public void clearFeild(){
     public void addEmployee_UpdateBtnOnAction(ActionEvent actionEvent) {
 
         empUpdateDetail();
+        clearFeild();
     }
     // update button Details
     public void empUpdateDetail(){
@@ -455,7 +475,9 @@ public void clearFeild(){
             Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "If You Want Update", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> buttonType = alt.showAndWait();
             if(buttonType.get().equals(ButtonType.YES)){
+
                 String url =getData;
+
                 url =url.replace("\\","\\\\");
                 java.util.Date date = new java.util.Date();
                 java.sql.Date date1=  new java.sql.Date(date.getTime());
@@ -471,9 +493,15 @@ public void clearFeild(){
                 preparedStatement.executeUpdate();
                 loadAddEmployeeTable();
                 addEmployee_TableView.refresh();
+                clearFeild();
+               String s = empIdCreator();
+               empID=s;
+               addEmployee_EmpId.setText(s);
             }
             else{
                 clearFeild();
+
+
                 addEmployee_EmpId.setText(empID);
 
 
@@ -547,4 +575,20 @@ public void clearFeild(){
         addEmployee_EmpId.setText((String) s);
 
     }
+
+//    public void getDatapath(){
+//
+//        Connection connection = Dbconnection.getInstance().getConnection();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement("select image from employee where empID=?");
+//            preparedStatement.setObject(1,empID);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            if(resultSet.next()){
+//                Comparable<String> PathBeforUpdate = resultSet.getString(7);
+//                getData= (String) PathBeforUpdate;
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }
