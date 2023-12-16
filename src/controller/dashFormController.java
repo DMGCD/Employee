@@ -7,6 +7,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static java.lang.Integer.parseInt;
 
@@ -254,6 +257,7 @@ empID=selectedItem.getEmpID();
         });
     }
     public void comboBoxEmpPosition(){
+
         addEmployee_Position.setItems(FXCollections.observableArrayList(position));
     }
     public void comboBoxEmpGEnder(){
@@ -263,6 +267,8 @@ empID=selectedItem.getEmpID();
     private String [] position={"Web Dveloper(Front)","Web Developer(Back)","Web Developer(Full Stack","Mobile App Developer","Web Designer","UI/Ux Desingner"};
 
     private String [] gender={"Male","Female","Other"};
+    private  final  ObservableList<addEmployeeTM> dataListSearch =FXCollections.observableArrayList();
+
     public void initAddEmployeeTableColumns(){
         addEmployee_TableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empID"));
         addEmployee_TableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -272,7 +278,49 @@ empID=selectedItem.getEmpID();
         addEmployee_TableView.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("position"));
         addEmployee_TableView.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>("date"));
 
+addEmployee_TableView.setItems(dataListSearch);
+searchFilterMethod();
     }
+
+    private void searchFilterMethod() {
+FilteredList filterData=new FilteredList<>(dataListSearch,e->true);
+addEmployee_Search.setOnKeyReleased(e->{
+    addEmployee_Search.textProperty().addListener((observable, oldValue, newValue) ->{
+
+        filterData.setPredicate((Predicate <? super addEmployeeTM >) cust-> {
+            String lowerCaseFilter =  newValue.toLowerCase();
+            if(cust.getEmpID().contains(newValue)){
+                return true;
+            }
+            else if(cust.getFirstName().toLowerCase().contains(lowerCaseFilter)){
+                return true;
+            }
+            else if(cust.getLastName().toLowerCase().contains(lowerCaseFilter)){
+                return true;
+            }
+            else if(cust.getPosition().toLowerCase().contains(lowerCaseFilter)){
+                return true;
+            }
+            else if(cust.getPhoneNum().toLowerCase().contains(lowerCaseFilter)){
+                return true;
+            }
+            else if(cust.getGender().toLowerCase().contains(lowerCaseFilter)){
+                return true;
+            }
+
+           return false;
+        });
+
+    } );
+    final SortedList<addEmployeeTM> sortedData = new SortedList<>(filterData);
+    sortedData.comparatorProperty().bind(addEmployee_TableView.comparatorProperty());
+    addEmployee_TableView.setItems(sortedData);
+
+
+});
+
+    }
+
     public void loadAddEmployeeTable(){
 
         addEmployee_TableView.getItems().clear();
@@ -495,6 +543,8 @@ public void clearFeild(){
     public void addEmployee_clearBtnOnAction(ActionEvent actionEvent) {
 
         clearFeild();
+        Comparable<String> s = empIdCreator();
+        addEmployee_EmpId.setText((String) s);
 
     }
 }
