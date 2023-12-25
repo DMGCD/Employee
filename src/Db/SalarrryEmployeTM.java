@@ -9,8 +9,8 @@ public class SalarrryEmployeTM {
     public SalarrryEmployeTM() {
     }
 
-    private int salary;
-    public SalarrryEmployeTM(String empId, String firstName, String lastName, String positionEmp, int salary) {
+    private double salary;
+    public SalarrryEmployeTM(String empId, String firstName, String lastName, String positionEmp, double salary) {
         this.empId = empId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,7 +52,7 @@ public class SalarrryEmployeTM {
         this.positionEmp = positionEmp;
     }
 
-    public int getSalary() {
+    public double getSalary() {
         return salary;
     }
 

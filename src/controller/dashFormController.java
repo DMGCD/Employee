@@ -167,12 +167,7 @@ salaryForm.setVisible(false);
 homeBtn.setStyle("-fx-background-color: #48A538");
 addEmployeeNav_btn.setStyle("-fx-background-color: transparent");
 salary_btn.setStyle("-fx-background-color: transparent");
-//        try {
-//            Thread.sleep(300);
-//            homeBtn.setStyle("-fx-background-color: transparent");
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+
     }
 
     public void addEmployeeNav_btnOnAction(ActionEvent actionEvent) {
@@ -189,12 +184,7 @@ addEmployee_Search.clear();
         addEmployeeNav_btn.setStyle("-fx-background-color: #48A538");
         salary_btn.setStyle("-fx-background-color: transparent");
 
-//        try {
-//            Thread.sleep(300);
-//            addEmployeeNav_btn.setStyle("-fx-background-color: transparent");
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+
     }
 
     public void salary_btnOnAction(ActionEvent actionEvent) {
@@ -206,15 +196,10 @@ addEmployee_Search.clear();
         addEmployeeNav_btn.setStyle("-fx-background-color:transparent ");
         salary_btn.setStyle("-fx-background-color: #48A538");
 
-//        try {
-//            Thread.sleep(300);
-//            salary_btn.setStyle("-fx-background-color: transparent");
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+
     }
 
-    
+//Salary tble load ,insert data
 
     public void intiDataSalaryTbale(){
         salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empId"));
@@ -223,12 +208,47 @@ addEmployee_Search.clear();
         salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("positionEmp"));
         salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("salary"));
     }
+
+    public void salaryTableLoad(){
+        salaryTableView.getItems().clear();
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select *from salary");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                String empId = resultSet.getString(2);
+                String fName = resultSet.getString(3);
+                String lName = resultSet.getString(4);
+                String positionEmp = resultSet.getString(5);
+                double salary = resultSet.getDouble(6);
+                ObservableList<SalarrryEmployeTM> items = salaryTableView.getItems();
+                items.add(new SalarrryEmployeTM(empId,fName,lName,positionEmp,salary));
+                salaryTableView.refresh();
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public void salaryTbleInsertData(){
+
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into salary(empId,firstName,lastName,position,salary) values(?,?,?,?,?)");
+//            preparedStatement.setObject(1,);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
    //initialize method
     public void initialize(){
         empIdCreator();
+
         addEmployee_EmpId.setText(empID);
         addEmployee_EmpId.setDisable(true);
-//initialize ComboBox
+        //initialize ComboBox
         comboBoxEmpPosition();
         comboBoxEmpGEnder();
         homeForm.setVisible(true);
@@ -238,6 +258,7 @@ addEmployee_Search.clear();
         initAddEmployeeTableColumns();
         intiDataSalaryTbale();
         loadAddEmployeeTable();
+        salaryTableLoad();
 
         addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
             @Override
@@ -257,7 +278,7 @@ empID=selectedItem.getEmpID();
                     getData=selectedItem.getImage();
 
 
-//                    addEmployee_TableView.getSelectionModel().getSelectedItems().clear();
+
                     addEmployee_TableView.refresh();
 
                 }
@@ -576,19 +597,4 @@ public void clearFeild(){
 
     }
 
-//    public void getDatapath(){
-//
-//        Connection connection = Dbconnection.getInstance().getConnection();
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement("select image from employee where empID=?");
-//            preparedStatement.setObject(1,empID);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            if(resultSet.next()){
-//                Comparable<String> PathBeforUpdate = resultSet.getString(7);
-//                getData= (String) PathBeforUpdate;
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }
