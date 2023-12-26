@@ -36,6 +36,19 @@ import java.util.function.Predicate;
 import static java.lang.Integer.parseInt;
 
 public class dashFormController {
+    @FXML
+    private TextField salary_EmpId;
+
+    @FXML
+    private Label salary_LastName;
+
+    @FXML
+    private Label salary_Position;
+
+    @FXML
+    private TextField salary_Salary;
+    @FXML
+    private Label salary_firstName;
   //logout
     @FXML
     private Button LogOutbtn;
@@ -271,6 +284,19 @@ addEmployee_Search.clear();
 
 
     }
+    public void salary_UpdatebtnOnAction(ActionEvent actionEvent) {
+        Db
+    }
+
+    public void salary_ClearbtnOnAction(ActionEvent actionEvent) {
+        salaryTableView.refresh();
+        salary_Salary.clear();
+        salary_firstName.setText("");
+        salary_EmpId.clear();
+        salary_LastName.setText("");
+        salary_Position.setText("");
+        salaryTableView.getSelectionModel().clearSelection();
+    }
    //initialize method
     public void initialize(){
         empIdCreator();
@@ -287,8 +313,25 @@ addEmployee_Search.clear();
         initAddEmployeeTableColumns();
         intiDataSalaryTbale();
         loadAddEmployeeTable();
-
-
+        //salary tble selection items get to text field
+salaryTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SalarrryEmployeTM>() {
+    @Override
+    public void changed(ObservableValue<? extends SalarrryEmployeTM> observable, SalarrryEmployeTM oldValue, SalarrryEmployeTM newValue) {
+        ObservableList<SalarrryEmployeTM> items = salaryTableView.getItems();
+        SalarrryEmployeTM selectedItem = salaryTableView.getSelectionModel().getSelectedItem();
+        if(items!=null &&selectedItem!=null){
+            salary_EmpId.setText(selectedItem.getEmpId());
+            salary_firstName.setText(selectedItem.getFirstName());
+salary_LastName.setText(selectedItem.getLastName());
+salary_Position.setText(selectedItem.getPositionEmp());
+salary_Salary.setText(String.valueOf(selectedItem.getSalary()));
+        }
+        else{
+            return;
+        }
+    }
+});
+// employee tble selected item get to text field
         addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
             @Override
             public void changed(ObservableValue<? extends addEmployeeTM> observable, addEmployeeTM oldValue, addEmployeeTM newValue) {
@@ -625,5 +668,6 @@ public void clearFeild(){
         addEmployee_EmpId.setText((String) s);
 
     }
+
 
 }

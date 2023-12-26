@@ -302,8 +302,8 @@
                                           <URL value="@../css/dashBoard.css" />
                                           <URL value="@../css/dashBoard.css" />
                                        </stylesheets></TextField>
-                                    <Button fx:id="salary_Updatebtn" layoutX="184.0" layoutY="329.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" styleClass="updateBtn" stylesheets="@../css/dashBoard.css" text="Update" />
-                                    <Button fx:id="salary_Clearbtn" layoutX="67.0" layoutY="329.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" styleClass="clearBtn" stylesheets="@../css/dashBoard.css" text="Clear" />
+                                    <Button fx:id="salary_Updatebtn" layoutX="184.0" layoutY="329.0" mnemonicParsing="false" onAction="#salary_UpdatebtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="updateBtn" stylesheets="@../css/dashBoard.css" text="Update" />
+                                    <Button fx:id="salary_Clearbtn" layoutX="67.0" layoutY="329.0" mnemonicParsing="false" onAction="#salary_ClearbtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="clearBtn" stylesheets="@../css/dashBoard.css" text="Clear" />
                                  </children>
                                  <stylesheets>
                                     <URL value="@../css/dashBoard.css" />
