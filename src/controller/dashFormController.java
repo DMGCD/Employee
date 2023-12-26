@@ -111,6 +111,7 @@ double y;
     String getData;
     Comparable<String> empPostion;
     Comparable<String> empGender;
+    double salary;
 
     public void btaadminnCloseOnAction(ActionEvent actionEvent) {
 
@@ -180,6 +181,7 @@ addEmployee_Search.clear();
         homeForm.setVisible(false);
         addEmployeeForm.setVisible(true);
         salaryForm.setVisible(false);
+
         homeBtn.setStyle("-fx-background-color: transparent");
         addEmployeeNav_btn.setStyle("-fx-background-color: #48A538");
         salary_btn.setStyle("-fx-background-color: transparent");
@@ -191,7 +193,8 @@ addEmployee_Search.clear();
         homeForm.setVisible(false);
         addEmployeeForm.setVisible(false);
         salaryForm.setVisible(true);
-
+        salaryTbleInsertData();
+        salaryTableLoad();
         homeBtn.setStyle("-fx-background-color: transparent");
         addEmployeeNav_btn.setStyle("-fx-background-color:transparent ");
         salary_btn.setStyle("-fx-background-color: #48A538");
@@ -203,10 +206,10 @@ addEmployee_Search.clear();
 
     public void intiDataSalaryTbale(){
         salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empId"));
-        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("positionEmp"));
-        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("salary"));
+        salaryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        salaryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        salaryTableView.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("positionEmp"));
+        salaryTableView.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("salary"));
     }
 
     public void salaryTableLoad(){
@@ -235,12 +238,38 @@ addEmployee_Search.clear();
     public void salaryTbleInsertData(){
 
         Connection connection = Dbconnection.getInstance().getConnection();
+        Connection connection1 = Dbconnection.getInstance().getConnection();
+        salary=0.00;
+
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("insert into salary(empId,firstName,lastName,position,salary) values(?,?,?,?,?)");
-//            preparedStatement.setObject(1,);
+            PreparedStatement preparedStatement = connection.prepareStatement("select *from employee");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement2 = connection.prepareStatement("delete from salary");
+            preparedStatement2.executeUpdate();
+
+
+            while(resultSet.next()){
+                PreparedStatement preparedStatement1 = connection.prepareStatement("INSERT INTO salary(empid,firstName,lastName,position,salary)  VALUES  (?,?,?,?,?)");
+                String empId = resultSet.getString(2);
+                String fName = resultSet.getString(3);
+                String lName = resultSet.getString(4);
+                String posiEmp = resultSet.getString(7);
+
+                preparedStatement1.setObject(1,empId);
+                preparedStatement1.setObject(2,fName);
+                preparedStatement1.setObject(3,lName);
+                preparedStatement1.setObject(4,posiEmp);
+                preparedStatement1.setObject(5,salary);
+                preparedStatement1.executeUpdate();
+                System.out.println(empId+fName+lName+posiEmp);
+                salaryTableView.refresh();
+
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+
     }
    //initialize method
     public void initialize(){
@@ -258,7 +287,7 @@ addEmployee_Search.clear();
         initAddEmployeeTableColumns();
         intiDataSalaryTbale();
         loadAddEmployeeTable();
-        salaryTableLoad();
+
 
         addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
             @Override
@@ -300,7 +329,7 @@ empID=selectedItem.getEmpID();
 
         addEmployee_Gender.setItems(FXCollections.observableArrayList(gender));
     }
-    private String [] position={"Web Dveloper(Front)","Web Developer(Back)","Web Developer(Full Stack","Mobile App Developer","Web Designer","UI/Ux Desingner"};
+    private String [] position={"Web Dveloper(Front)","Web Developer(Back)","Web Developer(Full Stack)","Mobile App Developer","Web Designer","UI/Ux Desingner"};
 
     private String [] gender={"Male","Female","Other"};
     private  final  ObservableList<addEmployeeTM> dataListSearch =FXCollections.observableArrayList();
@@ -420,7 +449,7 @@ if(addEmployee_Position.getSelectionModel().getSelectedItem()!=null && addEmploy
 
     Optional<ButtonType> buttonType = alert.showAndWait();
     if(buttonType.get().equals(ButtonType.OK)){
-        Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+        Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "If You Want Another Employee Details! ", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> buttonType1 = alt.showAndWait();
         if(buttonType1.get().equals(ButtonType.YES)){
             clearFeild();
