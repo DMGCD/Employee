@@ -285,7 +285,12 @@ addEmployee_Search.clear();
 
     }
     public void salary_UpdatebtnOnAction(ActionEvent actionEvent) {
-        Db
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            connection.prepareStatement("update salary");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void salary_ClearbtnOnAction(ActionEvent actionEvent) {
