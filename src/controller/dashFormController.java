@@ -125,7 +125,7 @@ double y;
     Comparable<String> empPostion;
     Comparable<String> empGender;
     double salary;
-
+    String empidSalary;
     public void btaadminnCloseOnAction(ActionEvent actionEvent) {
 
         System.exit(0);
@@ -206,8 +206,8 @@ addEmployee_Search.clear();
         homeForm.setVisible(false);
         addEmployeeForm.setVisible(false);
         salaryForm.setVisible(true);
-        salaryTbleInsertData();
         salaryTableLoad();
+
         homeBtn.setStyle("-fx-background-color: transparent");
         addEmployeeNav_btn.setStyle("-fx-background-color:transparent ");
         salary_btn.setStyle("-fx-background-color: #48A538");
@@ -248,49 +248,58 @@ addEmployee_Search.clear();
 
 
     }
-    public void salaryTbleInsertData(){
-
-        Connection connection = Dbconnection.getInstance().getConnection();
-        Connection connection1 = Dbconnection.getInstance().getConnection();
-        salary=0.00;
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("select *from employee");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            PreparedStatement preparedStatement2 = connection.prepareStatement("delete from salary");
-            preparedStatement2.executeUpdate();
-
-
-            while(resultSet.next()){
-                PreparedStatement preparedStatement1 = connection.prepareStatement("INSERT INTO salary(empid,firstName,lastName,position,salary)  VALUES  (?,?,?,?,?)");
-                String empId = resultSet.getString(2);
-                String fName = resultSet.getString(3);
-                String lName = resultSet.getString(4);
-                String posiEmp = resultSet.getString(7);
-
-                preparedStatement1.setObject(1,empId);
-                preparedStatement1.setObject(2,fName);
-                preparedStatement1.setObject(3,lName);
-                preparedStatement1.setObject(4,posiEmp);
-                preparedStatement1.setObject(5,salary);
-                preparedStatement1.executeUpdate();
-                System.out.println(empId+fName+lName+posiEmp);
-                salaryTableView.refresh();
-
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
+//    public void salaryTbleInsertData(){
+//
+//        Connection connection = Dbconnection.getInstance().getConnection();
+//        Connection connection1 = Dbconnection.getInstance().getConnection();
+//
+//
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement("select *from employee");
+//            ResultSet resultSet = preparedStatement.executeQuery();
+////            PreparedStatement preparedStatement2 = connection.prepareStatement("delete empid,firstName,lastName,position from salary");
+////            preparedStatement2.executeUpdate();
+//
+//
+//            while(resultSet.next()){
+//                PreparedStatement preparedStatement1 = connection.prepareStatement("INSERT INTO salary(empid,firstName,lastName,position)  VALUES  (?,?,?,?)");
+//                String empId = resultSet.getString(2);
+//                String fName = resultSet.getString(3);
+//                String lName = resultSet.getString(4);
+//                String posiEmp = resultSet.getString(7);
+//
+//                preparedStatement1.setObject(1,empId);
+//                preparedStatement1.setObject(2,fName);
+//                preparedStatement1.setObject(3,lName);
+//                preparedStatement1.setObject(4,posiEmp);
+////                preparedStatement1.setObject(5,salary);
+//                preparedStatement1.executeUpdate();
+//                System.out.println(empId+fName+lName+posiEmp);
+//                salaryTableView.refresh();
+//
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//
+//    }
     public void salary_UpdatebtnOnAction(ActionEvent actionEvent) {
         Connection connection = Dbconnection.getInstance().getConnection();
         try {
-            connection.prepareStatement("update salary");
+            double x = Double.parseDouble(salary_Salary.getText());
+            PreparedStatement preparedStatement = connection.prepareStatement("update salary set salary=? where empid=?");
+            preparedStatement.setObject(1,x);
+            preparedStatement.setObject(2,empidSalary);
+            preparedStatement.executeUpdate();
+            salaryTableLoad();
+            salaryTableView.refresh();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        salaryTableLoad();
+        salaryTableView.refresh();
     }
 
     public void salary_ClearbtnOnAction(ActionEvent actionEvent) {
@@ -301,6 +310,8 @@ addEmployee_Search.clear();
         salary_LastName.setText("");
         salary_Position.setText("");
         salaryTableView.getSelectionModel().clearSelection();
+        salaryTableLoad();
+        salaryTableView.refresh();
     }
    //initialize method
     public void initialize(){
@@ -330,6 +341,7 @@ salaryTableView.getSelectionModel().selectedItemProperty().addListener(new Chang
 salary_LastName.setText(selectedItem.getLastName());
 salary_Position.setText(selectedItem.getPositionEmp());
 salary_Salary.setText(String.valueOf(selectedItem.getSalary()));
+empidSalary =salary_EmpId.getText();
         }
         else{
             return;
@@ -368,6 +380,8 @@ empID=selectedItem.getEmpID();
 
             }
         });
+        salaryTableLoad();
+//        salaryTbleInsertData();
     }
     public void comboBoxEmpPosition(){
 
@@ -495,6 +509,7 @@ if(addEmployee_Position.getSelectionModel().getSelectedItem()!=null && addEmploy
     insertData();
 
 
+
     Optional<ButtonType> buttonType = alert.showAndWait();
     if(buttonType.get().equals(ButtonType.OK)){
         Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "If You Want Another Employee Details! ", ButtonType.YES, ButtonType.NO);
@@ -550,6 +565,14 @@ public void clearFeild(){
             preparedStatement.setObject(7,getData);
             preparedStatement.setObject(8,date1);
             preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement1 = connection.prepareStatement("insert into salary(empid,firstName,lastName,position,salary) values(?,?,?,?,?)");
+            preparedStatement1.setObject(1,addEmployee_EmpId.getText());
+            preparedStatement1.setObject(2,addEmployee_FirstName.getText());
+            preparedStatement1.setObject(3,addEmployee_LastName.getText());
+            preparedStatement1.setObject(4,addEmployee_Position.getSelectionModel().getSelectedItem());
+            preparedStatement1.setObject(5,0.00);
+            preparedStatement1.executeUpdate();
+
 
             loadAddEmployeeTable();
             addEmployee_TableView.refresh();
@@ -564,6 +587,7 @@ public void clearFeild(){
     public void addEmployee_UpdateBtnOnAction(ActionEvent actionEvent) {
 
         empUpdateDetail();
+
         clearFeild();
     }
     // update button Details
@@ -616,8 +640,13 @@ public void clearFeild(){
         Connection connection = Dbconnection.getInstance().getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("delete from employee where empID =?");
+            PreparedStatement preparedStatement1 = connection.prepareStatement("delete from salary where empID =?");
+            preparedStatement1.setObject(1,empID);
+
+
             preparedStatement.setObject(1,empID);
             int i = preparedStatement.executeUpdate();
+            preparedStatement1.executeUpdate();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Delete Successfull",ButtonType.OK);
 
             Optional<ButtonType> buttonType = alert.showAndWait();
@@ -625,6 +654,8 @@ public void clearFeild(){
                 clearFeild();
                 loadAddEmployeeTable();
             }
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
