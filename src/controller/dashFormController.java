@@ -293,7 +293,8 @@ addEmployee_Search.clear();
             preparedStatement.setObject(2,empidSalary);
             preparedStatement.executeUpdate();
             salaryTableLoad();
-            salaryTableView.refresh();
+            salaryClearField();
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -303,6 +304,9 @@ addEmployee_Search.clear();
     }
 
     public void salary_ClearbtnOnAction(ActionEvent actionEvent) {
+        salaryClearField();
+    }
+    public void salaryClearField(){
         salaryTableView.refresh();
         salary_Salary.clear();
         salary_firstName.setText("");
@@ -316,7 +320,7 @@ addEmployee_Search.clear();
    //initialize method
     public void initialize(){
         empIdCreator();
-
+salary_EmpId.setDisable(true);
         addEmployee_EmpId.setText(empID);
         addEmployee_EmpId.setDisable(true);
         //initialize ComboBox
@@ -614,6 +618,12 @@ public void clearFeild(){
                 preparedStatement.setObject(8,addEmployee_EmpId.getText());
                 preparedStatement.executeUpdate();
                 loadAddEmployeeTable();
+                PreparedStatement preparedStatement1 = connection.prepareStatement("update salary  set firstName=?, lastName=?,position=? where empid=?");
+                preparedStatement1.setObject(1,addEmployee_FirstName.getText());
+                preparedStatement1.setObject(2,addEmployee_LastName.getText());
+                preparedStatement1.setObject(3,addEmployee_Position.getSelectionModel().getSelectedItem());
+                preparedStatement1.setObject(4,addEmployee_EmpId.getText());
+                preparedStatement1.executeUpdate();
                 addEmployee_TableView.refresh();
                 clearFeild();
                String s = empIdCreator();

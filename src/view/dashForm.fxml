@@ -27,7 +27,7 @@
                <top>
                   <AnchorPane prefHeight="35.0" prefWidth="200.0" styleClass="top-form" stylesheets="@../css/dashBoard.css" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="39.0" prefWidth="1114.0" styleClass="semi-top-form" stylesheets="@../css/dashBoard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="39.0" prefWidth="1114.0" styleClass="semi-top-form" stylesheets="@../css/dashBoard.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <FontAwesomeIconView glyphName="USER" layoutX="14.0" layoutY="22.0" size="1.5em" />
                               <Label layoutX="45.0" layoutY="9.0" text="Employee Mangement System">
@@ -104,7 +104,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="homeForm" layoutX="89.0" layoutY="94.0" prefHeight="565.0" prefWidth="876.0" stylesheets="@../css/dashBoard.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="homeForm" layoutX="89.0" layoutY="94.0" prefHeight="565.0" prefWidth="876.0" stylesheets="@../css/dashBoard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="12.0" layoutY="6.0" prefHeight="541.0" prefWidth="856.0" stylesheets="@../css/dashBoard.css">
                                  <styleClass>
@@ -246,7 +246,7 @@
                                     <Button fx:id="addEmployee_addBtn" layoutX="732.0" layoutY="490.0" mnemonicParsing="false" onAction="#addEmployee_addBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="addBtn" stylesheets="@../css/dashBoard.css" text="Add" />
                                     <Button fx:id="addEmployee_UpdateBtn" layoutX="561.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_UpdateBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="updateBtn" stylesheets="@../css/dashBoard.css" text="Update" />
                                     <Button fx:id="addEmployee_Deletebtn" layoutX="387.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_DeletebtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="deleteBtn" stylesheets="@../css/dashBoard.css" text="Delete" />
-                                    <Button fx:id="addEmployee_clearBtn" layoutX="216.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_clearBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="clearBtn" stylesheets="@../css/dashBoard.css" text="Clear" />
+                                    <Button fx:id="addEmployee_clearBtn" layoutX="216.0" layoutY="491.0" mnemonicParsing="false" onAction="#addEmployee_clearBtnOnAction" prefHeight="30.0" prefWidth="80.0" styleClass="clearBtn" stylesheets="@../css/dashBoard.css" text="Refresh" />
                                  </children>
                                  <stylesheets>
                                     <URL value="@../css/dashBoard.css" />
@@ -255,9 +255,9 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="salaryForm" layoutX="14.0" layoutY="25.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="salaryForm" layoutX="14.0" layoutY="25.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="545.0" prefWidth="306.0">
+                              <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="545.0" prefWidth="306.0" visible="false">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
