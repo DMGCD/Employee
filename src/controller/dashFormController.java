@@ -714,6 +714,9 @@ public void clearFeild(){
         addEmployee_EmpId.setText((String) s);
 
     }
+    // HOME INTER FACE
+    public void homeCountTotalEmployee(){
 
+    }
 
 }
