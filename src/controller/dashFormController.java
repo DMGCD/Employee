@@ -16,6 +16,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.ParallelCamera;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -36,39 +40,23 @@ import java.util.function.Predicate;
 import static java.lang.Integer.parseInt;
 
 public class dashFormController {
-    @FXML
-    private TextField salary_EmpId;
 
-    @FXML
-    private Label salary_LastName;
-
-    @FXML
-    private Label salary_Position;
-
-    @FXML
-    private TextField salary_Salary;
-    @FXML
-    private Label salary_firstName;
   //logout
     @FXML
     private Button LogOutbtn;
 //anchor pane set
     @FXML
     private AnchorPane addEmployeeForm;
-    @FXML
-    private AnchorPane salaryForm;
-    @FXML
-    private AnchorPane homeForm;
+
+
 
     //btn set of nav bar
     @FXML
     private Button addEmployeeNav_btn;
 
-    @FXML
-    private Button homeBtn;
 
-    @FXML
-    private Button salary_btn;
+
+
 
     //************************
     @FXML
@@ -124,8 +112,86 @@ double y;
     String getData;
     Comparable<String> empPostion;
     Comparable<String> empGender;
-    double salary;
-    String empidSalary;
+
+    //initialize method
+    public void initialize(){
+        empIdCreator();
+        salary_EmpId.setDisable(true);
+        addEmployee_EmpId.setText(empID);
+        addEmployee_EmpId.setDisable(true);
+        //initialize ComboBox
+        comboBoxEmpPosition();
+        comboBoxEmpGEnder();
+        homeForm.setVisible(true);
+        addEmployeeForm.setVisible(false);
+        salaryForm.setVisible(false);
+        //initalize colomn for table
+        initAddEmployeeTableColumns();
+        intiDataSalaryTbale();
+        loadAddEmployeeTable();
+
+        //salary tble selection items get to text field
+        salaryTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SalarrryEmployeTM>() {
+            @Override
+            public void changed(ObservableValue<? extends SalarrryEmployeTM> observable, SalarrryEmployeTM oldValue, SalarrryEmployeTM newValue) {
+                ObservableList<SalarrryEmployeTM> items = salaryTableView.getItems();
+                SalarrryEmployeTM selectedItem = salaryTableView.getSelectionModel().getSelectedItem();
+                if(items!=null &&selectedItem!=null){
+                    salary_EmpId.setText(selectedItem.getEmpId());
+                    salary_firstName.setText(selectedItem.getFirstName());
+                    salary_LastName.setText(selectedItem.getLastName());
+                    salary_Position.setText(selectedItem.getPositionEmp());
+                    salary_Salary.setText(String.valueOf(selectedItem.getSalary()));
+
+                    empidSalary =salary_EmpId.getText();
+                    salary_Salary.requestFocus();
+
+                }
+                else{
+                    return;
+                }
+            }
+        });
+// employee tble selected item get to text field
+        addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
+            @Override
+            public void changed(ObservableValue<? extends addEmployeeTM> observable, addEmployeeTM oldValue, addEmployeeTM newValue) {
+                addEmployeeTM selectedItem = addEmployee_TableView.getSelectionModel().getSelectedItem();
+                ObservableList<addEmployeeTM> items = addEmployee_TableView.getSelectionModel().getSelectedItems();
+                if(selectedItem != null ){
+
+                    empID=selectedItem.getEmpID();
+                    addEmployee_EmpId.setText(empID);
+                    addEmployee_FirstName.setText(selectedItem.getFirstName());
+                    addEmployee_LastName.setText(selectedItem.getLastName());
+                    addEmployee_Phone.setText(selectedItem.getPhoneNum());
+                    String url ="file:"+ selectedItem.getImage();
+                    image =new Image(url,101,97,false,true);
+                    addEmployeeImageview.setImage(image);
+                    getData=selectedItem.getImage();
+
+
+
+                    addEmployee_TableView.refresh();
+
+                }
+                else{
+
+                    addEmployee_TableView.refresh();
+                    return;
+                }
+
+
+            }
+        });
+        salaryTableLoad();
+        homeCountTotalEmployee();
+        homeActivePerson();
+        homeInActivePerson();
+        showChart();
+
+    }
+    //Nav bar and interface controller
     public void btaadminnCloseOnAction(ActionEvent actionEvent) {
 
         System.exit(0);
@@ -173,16 +239,7 @@ else{
 }
     }
 
-    public void homeBtnOnAction(ActionEvent actionEvent) {
-        addEmployee_Search.clear();
-homeForm.setVisible(true);
-addEmployeeForm.setVisible(false);
-salaryForm.setVisible(false);
-homeBtn.setStyle("-fx-background-color: #48A538");
-addEmployeeNav_btn.setStyle("-fx-background-color: transparent");
-salary_btn.setStyle("-fx-background-color: transparent");
-
-    }
+// Add Employee Page
 
     public void addEmployeeNav_btnOnAction(ActionEvent actionEvent) {
 addEmployee_Search.clear();
@@ -202,191 +259,6 @@ addEmployee_Search.clear();
 
     }
 
-    public void salary_btnOnAction(ActionEvent actionEvent) {
-        homeForm.setVisible(false);
-        addEmployeeForm.setVisible(false);
-        salaryForm.setVisible(true);
-        salaryTableLoad();
-
-        homeBtn.setStyle("-fx-background-color: transparent");
-        addEmployeeNav_btn.setStyle("-fx-background-color:transparent ");
-        salary_btn.setStyle("-fx-background-color: #48A538");
-
-
-    }
-
-//Salary tble load ,insert data
-
-    public void intiDataSalaryTbale(){
-        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empId"));
-        salaryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        salaryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        salaryTableView.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("positionEmp"));
-        salaryTableView.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("salary"));
-    }
-
-    public void salaryTableLoad(){
-        salaryTableView.getItems().clear();
-        Connection connection = Dbconnection.getInstance().getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("select *from salary");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                String empId = resultSet.getString(2);
-                String fName = resultSet.getString(3);
-                String lName = resultSet.getString(4);
-                String positionEmp = resultSet.getString(5);
-                double salary = resultSet.getDouble(6);
-                ObservableList<SalarrryEmployeTM> items = salaryTableView.getItems();
-                items.add(new SalarrryEmployeTM(empId,fName,lName,positionEmp,salary));
-                salaryTableView.refresh();
-
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-//    public void salaryTbleInsertData(){
-//
-//        Connection connection = Dbconnection.getInstance().getConnection();
-//        Connection connection1 = Dbconnection.getInstance().getConnection();
-//
-//
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement("select *from employee");
-//            ResultSet resultSet = preparedStatement.executeQuery();
-////            PreparedStatement preparedStatement2 = connection.prepareStatement("delete empid,firstName,lastName,position from salary");
-////            preparedStatement2.executeUpdate();
-//
-//
-//            while(resultSet.next()){
-//                PreparedStatement preparedStatement1 = connection.prepareStatement("INSERT INTO salary(empid,firstName,lastName,position)  VALUES  (?,?,?,?)");
-//                String empId = resultSet.getString(2);
-//                String fName = resultSet.getString(3);
-//                String lName = resultSet.getString(4);
-//                String posiEmp = resultSet.getString(7);
-//
-//                preparedStatement1.setObject(1,empId);
-//                preparedStatement1.setObject(2,fName);
-//                preparedStatement1.setObject(3,lName);
-//                preparedStatement1.setObject(4,posiEmp);
-////                preparedStatement1.setObject(5,salary);
-//                preparedStatement1.executeUpdate();
-//                System.out.println(empId+fName+lName+posiEmp);
-//                salaryTableView.refresh();
-//
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//    }
-    public void salary_UpdatebtnOnAction(ActionEvent actionEvent) {
-        Connection connection = Dbconnection.getInstance().getConnection();
-        try {
-            double x = Double.parseDouble(salary_Salary.getText());
-            PreparedStatement preparedStatement = connection.prepareStatement("update salary set salary=? where empid=?");
-            preparedStatement.setObject(1,x);
-            preparedStatement.setObject(2,empidSalary);
-            preparedStatement.executeUpdate();
-            salaryTableLoad();
-            salaryClearField();
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        salaryTableLoad();
-        salaryTableView.refresh();
-    }
-
-    public void salary_ClearbtnOnAction(ActionEvent actionEvent) {
-        salaryClearField();
-    }
-    public void salaryClearField(){
-        salaryTableView.refresh();
-        salary_Salary.clear();
-        salary_firstName.setText("");
-        salary_EmpId.clear();
-        salary_LastName.setText("");
-        salary_Position.setText("");
-        salaryTableView.getSelectionModel().clearSelection();
-        salaryTableLoad();
-        salaryTableView.refresh();
-    }
-   //initialize method
-    public void initialize(){
-        empIdCreator();
-salary_EmpId.setDisable(true);
-        addEmployee_EmpId.setText(empID);
-        addEmployee_EmpId.setDisable(true);
-        //initialize ComboBox
-        comboBoxEmpPosition();
-        comboBoxEmpGEnder();
-        homeForm.setVisible(true);
-        addEmployeeForm.setVisible(false);
-        salaryForm.setVisible(false);
-       //initalize colomn for table
-        initAddEmployeeTableColumns();
-        intiDataSalaryTbale();
-        loadAddEmployeeTable();
-        //salary tble selection items get to text field
-salaryTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SalarrryEmployeTM>() {
-    @Override
-    public void changed(ObservableValue<? extends SalarrryEmployeTM> observable, SalarrryEmployeTM oldValue, SalarrryEmployeTM newValue) {
-        ObservableList<SalarrryEmployeTM> items = salaryTableView.getItems();
-        SalarrryEmployeTM selectedItem = salaryTableView.getSelectionModel().getSelectedItem();
-        if(items!=null &&selectedItem!=null){
-            salary_EmpId.setText(selectedItem.getEmpId());
-            salary_firstName.setText(selectedItem.getFirstName());
-salary_LastName.setText(selectedItem.getLastName());
-salary_Position.setText(selectedItem.getPositionEmp());
-salary_Salary.setText(String.valueOf(selectedItem.getSalary()));
-empidSalary =salary_EmpId.getText();
-        }
-        else{
-            return;
-        }
-    }
-});
-// employee tble selected item get to text field
-        addEmployee_TableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<addEmployeeTM>() {
-            @Override
-            public void changed(ObservableValue<? extends addEmployeeTM> observable, addEmployeeTM oldValue, addEmployeeTM newValue) {
-                addEmployeeTM selectedItem = addEmployee_TableView.getSelectionModel().getSelectedItem();
-                ObservableList<addEmployeeTM> items = addEmployee_TableView.getSelectionModel().getSelectedItems();
-                if(selectedItem != null ){
-
-empID=selectedItem.getEmpID();
-                     addEmployee_EmpId.setText(empID);
-                    addEmployee_FirstName.setText(selectedItem.getFirstName());
-                    addEmployee_LastName.setText(selectedItem.getLastName());
-                    addEmployee_Phone.setText(selectedItem.getPhoneNum());
-                    String url ="file:"+ selectedItem.getImage();
-                    image =new Image(url,101,97,false,true);
-                    addEmployeeImageview.setImage(image);
-                    getData=selectedItem.getImage();
-
-
-
-                    addEmployee_TableView.refresh();
-
-                }
-                else{
-
-                    addEmployee_TableView.refresh();
-                    return;
-                }
-
-
-            }
-        });
-        salaryTableLoad();
-//        salaryTbleInsertData();
-    }
     public void comboBoxEmpPosition(){
 
         addEmployee_Position.setItems(FXCollections.observableArrayList(position));
@@ -409,49 +281,49 @@ empID=selectedItem.getEmpID();
         addEmployee_TableView.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("position"));
         addEmployee_TableView.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>("date"));
 
-addEmployee_TableView.setItems(dataListSearch);
-searchFilterMethod();
-loadAddEmployeeTable();
+        addEmployee_TableView.setItems(dataListSearch);
+        searchFilterMethod();
+        loadAddEmployeeTable();
     }
 
     private void searchFilterMethod() {
-FilteredList filterData=new FilteredList<>(dataListSearch,e->true);
-addEmployee_Search.setOnKeyReleased(e->{
-    addEmployee_Search.textProperty().addListener((observable, oldValue, newValue) ->{
+        FilteredList filterData=new FilteredList<>(dataListSearch,e->true);
+        addEmployee_Search.setOnKeyReleased(e->{
+            addEmployee_Search.textProperty().addListener((observable, oldValue, newValue) ->{
 
-        filterData.setPredicate((Predicate <? super addEmployeeTM >) cust-> {
-            String lowerCaseFilter =  newValue.toLowerCase();
-            if(cust.getEmpID().contains(newValue)){
-                return true;
-            }
-            else if(cust.getFirstName().toLowerCase().contains(lowerCaseFilter)){
-                return true;
-            }
-            else if(cust.getLastName().toLowerCase().contains(lowerCaseFilter)){
-                return true;
-            }
-            else if(cust.getPosition().toLowerCase().contains(lowerCaseFilter)){
-                return true;
-            }
-            else if(cust.getPhoneNum().toLowerCase().contains(lowerCaseFilter)){
-                return true;
-            }
-            else if(cust.getGender().toLowerCase().contains(lowerCaseFilter)){
-                return true;
-            }
+                filterData.setPredicate((Predicate <? super addEmployeeTM >) cust-> {
+                    String lowerCaseFilter =  newValue.toLowerCase();
+                    if(cust.getEmpID().contains(newValue)){
+                        return true;
+                    }
+                    else if(cust.getFirstName().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
+                    else if(cust.getLastName().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
+                    else if(cust.getPosition().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
+                    else if(cust.getPhoneNum().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
+                    else if(cust.getGender().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
 
-           return false;
+                    return false;
+                });
+
+            } );
+            final SortedList<addEmployeeTM> sortedData = new SortedList<>(filterData);
+            sortedData.comparatorProperty().bind(addEmployee_TableView.comparatorProperty());
+            addEmployee_TableView.setItems(sortedData);
+
+
+
+
         });
-
-    } );
-    final SortedList<addEmployeeTM> sortedData = new SortedList<>(filterData);
-    sortedData.comparatorProperty().bind(addEmployee_TableView.comparatorProperty());
-    addEmployee_TableView.setItems(sortedData);
-
-
-
-
-});
 
 
     }
@@ -488,61 +360,62 @@ addEmployee_Search.setOnKeyReleased(e->{
         FileChooser open = new FileChooser();
         File getPath = open.showOpenDialog(mainFormRoot.getScene().getWindow());
         if(getPath!=null){
-         getData = getPath.getAbsolutePath();
+            getData = getPath.getAbsolutePath();
             image =new Image(getPath.toURI().toString(),101,97,false,true);
             addEmployeeImageview.setImage(image);
         }
     }
     public void addEmployee_GenderOnAction(ActionEvent actionEvent) {
 
-       empGender = addEmployee_Gender.getSelectionModel().getSelectedItem();
+        empGender = addEmployee_Gender.getSelectionModel().getSelectedItem();
 
     }
 
 
     public void addEmployee_PositionOnAction(ActionEvent actionEvent) {
-         empPostion = addEmployee_Position.getSelectionModel().getSelectedItem();
+        empPostion = addEmployee_Position.getSelectionModel().getSelectedItem();
 
     }
-//add button on Emmployee Add
+    //add button on Emmployee Add
+
     public void addEmployee_addBtnOnAction(ActionEvent actionEvent) {
-if(addEmployee_Position.getSelectionModel().getSelectedItem()!=null && addEmployee_Gender.getSelectionModel().getSelectedItem()!=null && addEmployee_FirstName.getText()!=null && addEmployee_LastName.getText()!=null && addEmployee_Phone.getText()!=null && addEmployee_EmpId.getText()!=null &&getData !=null && getData!=""){
-    Alert alert = new Alert(Alert.AlertType.INFORMATION,"",ButtonType.OK);
-    alert.setHeaderText("SuccessFul Add !");
+        if(addEmployee_Position.getSelectionModel().getSelectedItem()!=null && addEmployee_Gender.getSelectionModel().getSelectedItem()!=null && addEmployee_FirstName.getText()!=null && addEmployee_LastName.getText()!=null && addEmployee_Phone.getText()!=null && addEmployee_EmpId.getText()!=null &&getData !=null && getData!=""){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,"",ButtonType.OK);
+            alert.setHeaderText("SuccessFul Add !");
 
-    insertData();
+            insertData();
 
 
 
-    Optional<ButtonType> buttonType = alert.showAndWait();
-    if(buttonType.get().equals(ButtonType.OK)){
-        Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "If You Want Another Employee Details! ", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> buttonType1 = alt.showAndWait();
-        if(buttonType1.get().equals(ButtonType.YES)){
-            clearFeild();
-            empID=empIdCreator();
-            addEmployee_EmpId.setText(empID);
+            Optional<ButtonType> buttonType = alert.showAndWait();
+            if(buttonType.get().equals(ButtonType.OK)){
+                Alert alt = new Alert(Alert.AlertType.CONFIRMATION, "If You Want Another Employee Details! ", ButtonType.YES, ButtonType.NO);
+                Optional<ButtonType> buttonType1 = alt.showAndWait();
+                if(buttonType1.get().equals(ButtonType.YES)){
+                    clearFeild();
+                    empID=empIdCreator();
+                    addEmployee_EmpId.setText(empID);
+
+                }
+                else {
+                    clearFeild();
+                    empID=empIdCreator();
+                    addEmployee_EmpId.setText(empID);
+
+                }
+
+            }
 
         }
-        else {
-            clearFeild();
-            empID=empIdCreator();
-            addEmployee_EmpId.setText(empID);
-
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Fill   Correct And Dont give Blanck !");
+            alert.showAndWait();
         }
 
-    }
-
-}
-else{
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setHeaderText("Fill   Correct And Dont give Blanck !");
-    alert.showAndWait();
-}
-
 
     }
-public void clearFeild(){
+    public void clearFeild(){
         addEmployee_Gender.getSelectionModel().clearSelection();
         addEmployee_Position.getSelectionModel().clearSelection();
         addEmployee_LastName.clear();
@@ -551,7 +424,7 @@ public void clearFeild(){
         addEmployee_EmpId.clear();
         getData="";
         addEmployeeImageview.setImage(null);
-}
+    }
 
     public void insertData(){
 
@@ -595,6 +468,7 @@ public void clearFeild(){
         clearFeild();
     }
     // update button Details
+
     public void empUpdateDetail(){
         Connection connection = Dbconnection.getInstance().getConnection();
         try {
@@ -625,10 +499,11 @@ public void clearFeild(){
                 preparedStatement1.setObject(4,addEmployee_EmpId.getText());
                 preparedStatement1.executeUpdate();
                 addEmployee_TableView.refresh();
+
                 clearFeild();
-               String s = empIdCreator();
-               empID=s;
-               addEmployee_EmpId.setText(s);
+                String s = empIdCreator();
+                empID=s;
+                addEmployee_EmpId.setText(s);
             }
             else{
                 clearFeild();
@@ -672,7 +547,6 @@ public void clearFeild(){
 
 
     }
-
     public String empIdCreator(){
 
         Connection connection = Dbconnection.getInstance().getConnection();
@@ -682,7 +556,7 @@ public void clearFeild(){
             if(resultSet.next()){
                 String empIDS =resultSet.getString(1);
                 empIDS=empIDS.substring(1,empIDS.length());
-               int empIDI = Integer.parseInt(empIDS);
+                int empIDI = Integer.parseInt(empIDS);
                 empIDI++;
                 if(empIDI<10){
                     empIDS="E00"+empIDI;
@@ -714,8 +588,223 @@ public void clearFeild(){
         addEmployee_EmpId.setText((String) s);
 
     }
+
+
+
+//Salary tble load ,insert data
+
+
+@FXML
+private AnchorPane salaryForm;
+@FXML
+private TextField salary_EmpId;
+
+    @FXML
+    private Label salary_LastName;
+
+    @FXML
+    private Label salary_Position;
+
+    @FXML
+    private TextField salary_Salary;
+    @FXML
+    private Label salary_firstName;
+@FXML
+private Button salary_btn;
+
+double salary;
+    String empidSalary;
+public void salary_btnOnAction(ActionEvent actionEvent) {
+    homeForm.setVisible(false);
+    addEmployeeForm.setVisible(false);
+    salaryForm.setVisible(true);
+    salaryTableLoad();
+
+    homeBtn.setStyle("-fx-background-color: transparent");
+    addEmployeeNav_btn.setStyle("-fx-background-color:transparent ");
+    salary_btn.setStyle("-fx-background-color: #48A538");
+
+
+}
+
+    public void intiDataSalaryTbale(){
+        salaryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("empId"));
+        salaryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        salaryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        salaryTableView.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("positionEmp"));
+        salaryTableView.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("salary"));
+    }
+
+    public void salaryTableLoad(){
+        salaryTableView.getItems().clear();
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select *from salary");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                String empId = resultSet.getString(2);
+                String fName = resultSet.getString(3);
+                String lName = resultSet.getString(4);
+                String positionEmp = resultSet.getString(5);
+                double salary = resultSet.getDouble(6);
+                ObservableList<SalarrryEmployeTM> items = salaryTableView.getItems();
+                items.add(new SalarrryEmployeTM(empId,fName,lName,positionEmp,salary));
+                salaryTableView.refresh();
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public void salary_UpdatebtnOnAction(ActionEvent actionEvent) {
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            double x = Double.parseDouble(salary_Salary.getText());
+            PreparedStatement preparedStatement = connection.prepareStatement("update salary set salary=? where empid=?");
+            preparedStatement.setObject(1,x);
+            preparedStatement.setObject(2,empidSalary);
+            preparedStatement.executeUpdate();
+
+            salaryTableLoad();
+            salaryClearField();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        salaryTableLoad();
+        salaryTableView.refresh();
+    }
+
+    public void salary_ClearbtnOnAction(ActionEvent actionEvent) {
+        salaryClearField();
+    }
+    public void salaryClearField(){
+        salaryTableView.refresh();
+        salary_Salary.clear();
+        salary_firstName.setText("");
+        salary_EmpId.clear();
+        salary_LastName.setText("");
+        salary_Position.setText("");
+        salaryTableView.getSelectionModel().clearSelection();
+        salaryTableLoad();
+        salaryTableView.refresh();
+    }
+
+
+
+
+
     // HOME INTER FACE
+
+    @FXML
+    private AnchorPane homeForm;
+    @FXML
+    private Button homeBtn;
+    @FXML
+    private Label home_TotalEmploye;
+
+    @FXML
+    private Label home_TotalInactive;
+
+    @FXML
+    private Label home_TotalPresent;
+    public void homeBtnOnAction(ActionEvent actionEvent) {
+        addEmployee_Search.clear();
+        homeForm.setVisible(true);
+        addEmployeeForm.setVisible(false);
+        salaryForm.setVisible(false);
+        homeBtn.setStyle("-fx-background-color: #48A538");
+        addEmployeeNav_btn.setStyle("-fx-background-color: transparent");
+        salary_btn.setStyle("-fx-background-color: transparent");
+        homeCountTotalEmployee();
+        homeActivePerson();
+        homeInActivePerson();
+        showChart();
+
+
+    }
+   // Count total Employee
     public void homeCountTotalEmployee(){
+        int countData=0;
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select count(id) from employee");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                countData=resultSet.getInt("count(id)");
+            }
+            home_TotalEmploye.setText(String.valueOf(countData));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    //count Active Person
+    public void homeActivePerson(){
+        int countData=0;
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select count(id) from salary where salary !='0.0'");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                countData=resultSet.getInt("count(id)");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        home_TotalPresent.setText(String.valueOf(countData));
+
+    }
+    // InActive Person
+    public void   homeInActivePerson(){
+        int countData=0;
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select count(id) from salary where salary ='0.0'");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                countData=resultSet.getInt("count(id)");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        home_TotalInactive.setText(String.valueOf(countData));
+    }
+    // chart
+
+    @FXML
+    private CategoryAxis xCategory;
+
+    @FXML
+    private NumberAxis ySalary;
+    @FXML
+    private BarChart<?, ?> salryChart;
+
+    public void showChart(){
+salryChart.getData().clear();
+salryChart.setBarGap(2);
+salryChart.setCategoryGap(1);
+salryChart.setOpacity(.8);
+        Connection connection = Dbconnection.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select *from salary");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                XYChart.Series set = new XYChart.Series<>();
+                String fName = resultSet.getString(3);
+                String empId = resultSet.getString(2);
+                double salary = resultSet.getDouble(6);
+                set.getData().add(new XYChart.Data<>(fName,salary));
+                salryChart.getData().addAll(set);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 

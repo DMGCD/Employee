@@ -27,7 +27,7 @@
                <top>
                   <AnchorPane prefHeight="35.0" prefWidth="200.0" styleClass="top-form" stylesheets="@../css/dashBoard.css" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="39.0" prefWidth="1114.0" styleClass="semi-top-form" stylesheets="@../css/dashBoard.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="39.0" prefWidth="1114.0" styleClass="semi-top-form" stylesheets="@../css/dashBoard.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <FontAwesomeIconView glyphName="USER" layoutX="14.0" layoutY="22.0" size="1.5em" />
                               <Label layoutX="45.0" layoutY="9.0" text="Employee Mangement System">
@@ -177,12 +177,12 @@
                                           </AnchorPane>
                                        </children>
                                     </AnchorPane>
-                                    <BarChart fx:id="home_Chart" layoutX="132.0" layoutY="195.0" prefHeight="304.0" prefWidth="616.0" title="Employee Data Chart">
+                                    <BarChart fx:id="salryChart" layoutX="14.0" layoutY="183.0" prefHeight="346.0" prefWidth="833.0" title="Salary With Name">
                                       <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
+                                        <CategoryAxis label="Name" side="BOTTOM" fx:id="xCategory" />
                                       </xAxis>
                                       <yAxis>
-                                        <NumberAxis side="LEFT" />
+                                        <NumberAxis fx:id="ySalary" label="Salary" side="LEFT" />
                                       </yAxis>
                                     </BarChart>
                                  </children>
@@ -257,7 +257,7 @@
                         </AnchorPane>
                         <AnchorPane fx:id="salaryForm" layoutX="14.0" layoutY="25.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="545.0" prefWidth="306.0" visible="false">
+                              <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="545.0" prefWidth="306.0">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
